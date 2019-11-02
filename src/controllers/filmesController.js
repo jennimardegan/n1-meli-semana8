@@ -15,14 +15,21 @@ exports.getDiretor = (req, res) => {
 }
 
 exports.getGenero = (req, res) => {
-    const genero = req.params.genero
-    console.log(req.query)
-     if(!genero) {
+    const genre = req.params.genre
+// const listFilms = filmes.filter(e => e.genre.includes(genre)) --includes busca um texto dentro de array
+    let listFilms = [];
+    for (let i=0; i < filmes.length; i++) {
+        for(let j=0; j < filmes[i].genre.length; j++) {
+            if (filmes[i].genre[j] === genre) {
+                listFilms.push(filmes[i]);
+            }
+        }
+    }
+     if(listFilms.length === 0) {
          res.send('Genero não localizado.')
     }
-     const generosFilmes = filmes.genre
-    const nomeGeneros = generosFilmes.filter(nome => nome == genero)
-    res.status(200).send(nomeGeneros)
+
+    res.status(200).send(listFilms)
 }
 
 exports.post = (req, res) => {
@@ -39,17 +46,21 @@ exports.post = (req, res) => {
     return res.status(201).send(filmes);
     }
 
-    exports.postGenero = (req, res) => {
-        const { genre } = req.body;
-        const generosFilmes = filmes.genre
-        generosFilmes.push({ genre });
+exports.postGenero = (req, res) => {
+    const titulo = req.params.titulo;
+    const filme = filmes.find(filme => filme.title == titulo);
+    if (!filme) {
+        res.send('Filme não localizado.')
+    }
+    const { genre } = req.body;
+    filme.genre.push(genre);
         
-        fs.writeFile("./src/model/filmes.json", JSON.stringify(filmes), 'utf8', function (err) {
-            if (err) {
-                return res.status(500).send({ message: err });
-            }
-            console.log("The file was saved!");
-        });
-    
-        return res.status(201).send(filmes);
+    fs.writeFile("./src/model/filmes.json", JSON.stringify(filmes), 'utf8', function (err) {
+        if (err) {
+            return res.status(500).send({ message: err });
         }
+        console.log("The file was saved!");
+    });
+    
+    return res.status(201).send(filmes);
+    }
