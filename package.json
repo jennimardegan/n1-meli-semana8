@@ -33,7 +33,7 @@
     "deep-extend": "^0.6.0",
     "duplexer3": "^0.1.4",
     "escape-string-regexp": "^1.0.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "for-in": "^1.0.2",
     "get-stream": "^3.0.0",
     "get-value": "^2.0.6",
